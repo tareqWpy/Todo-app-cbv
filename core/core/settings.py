@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # ? via manage.py
+    "accounts",
+    "todo",
 ]
 
 MIDDLEWARE = [
@@ -142,4 +144,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # user manager config
 
-# AUTH_USER_MODEL = "accounts.User"
+AUTH_USER_MODEL = "accounts.User"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://8000-idx-my-todo-app-1723443171981.cluster-p6qcyjpiljdwusmrjxdspyb5m2.cloudworkstations.dev",
+]
