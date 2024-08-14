@@ -12,9 +12,22 @@
             <div class="modal-header p-5 pb-4 border-bottom-0">
                 <!-- <h5 class="modal-title">Modal title</h5> -->
                 <h2 class="fw-bold mb-0">Todo App</h2>
-                <a style="width:20px; height:20px;" type="button" href="{% url 'accounts:logout' %}"
-                    ><i class="bi bi-arrow-bar-right"></i
-                ></a>
+                <button type="button" class="btn">
+                    <a
+                        style="
+                            text-decoration: none;
+                            color: #333;
+                            width: 20px;
+                            height: 20px;
+                            display: inline-flex;
+                            margin-right: 40px;
+                        "
+                        type="button"
+                        href="{% url 'accounts:logout' %}"
+                        ><p>logout</p>
+                        <i class="bi bi-arrow-bar-right"></i
+                    ></a>
+                </button>
             </div>
 
             <div class="modal-body p-5 pt-0">
@@ -26,6 +39,7 @@
                     {% csrf_token %}
                     <div class="input-group mb-3">
                         <input
+                            required="True"
                             type="text"
                             class="form-control rounded-4"
                             name="title"
@@ -33,7 +47,7 @@
                             aria-label="Recipient's username"
                             aria-describedby="button-addon2"
                         />
-                        <button class="btn btn-primary" type="submit">
+                        <button class="btn btn-outline-success" type="submit">
                             Add
                         </button>
                     </div>
@@ -42,6 +56,7 @@
                     {% for task in tasks %}
                     <div class="input-group py-1">
                         <span
+                            style="overflow: hidden"
                             type="text"
                             class="form-control"
                             aria-label="Text input with segmented dropdown button"
