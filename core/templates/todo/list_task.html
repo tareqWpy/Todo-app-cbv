@@ -64,16 +64,17 @@
                     {% for task in tasks %}
                     <div class="input-group py-1">
                         <span
-                            style="overflow: hidden"
+                            style="overflow: hidden; 
+                                {% if task.complete == True %} 
+                                background-color: #d4edda; color: #155724; 
+                                {% else %} 
+                                background-color: #ffffff; color: #000000; 
+                                {% endif %}"
                             type="text"
                             class="form-control"
                             aria-label="Text input with segmented dropdown button"
                         >
-                            {% if task.complete == True %}
-                            <strike>{{task.title}}</strike>
-                            {% else %}
-                            <span>{{task}}</span>
-                            {% endif %}
+                        <span>{{task.title}}</span>
                         </span>
                         <a
                             type="button"
@@ -95,10 +96,11 @@
                                     class="dropdown-item"
                                     href="{% url 'compelete-task' task.id %}"
                                 >
-                                    {% if task.complete %}
-                                        Mark as Undone
-                                    {% else %}
-                                        Mark as Done
+                                    <!--prettier-ignore-->
+                                    {% if task.complete %} 
+                                    Mark as Undone 
+                                    {%else %} 
+                                    Mark as Done 
                                     {% endif %}
                                 </a>
                             </li>
