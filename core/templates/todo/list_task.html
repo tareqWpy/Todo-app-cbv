@@ -15,6 +15,7 @@
             class="modal-content rounded-5 shadow"
             style="
                 background: linear-gradient(to top, #fff5fa 0%, #fff5fa 100%);
+                border-radius: 16px;
             "
         >
             <div class="modal-header p-5 pb-4 border-bottom-0">
@@ -54,7 +55,7 @@
                             aria-label="Recipient's username"
                             aria-describedby="button-addon2"
                         />
-                        <button class="btn btn-outline-success" type="submit">
+                        <button class="btn btn-success" type="submit">
                             Add
                         </button>
                     </div>
@@ -76,7 +77,7 @@
                         </span>
                         <a
                             type="button"
-                            class="btn btn-danger"
+                            class="btn btn-outline-danger"
                             href="{% url 'delete-task' task.id %}"
                             ><i class="bi bi-trash"></i
                         ></a>
@@ -92,9 +93,14 @@
                             <li>
                                 <a
                                     class="dropdown-item"
-                                    href="{% url 'task-done' task.id %}"
-                                    >Done</a
+                                    href="{% url 'compelete-task' task.id %}"
                                 >
+                                    {% if task.complete %}
+                                        Mark as Undone
+                                    {% else %}
+                                        Mark as Done
+                                    {% endif %}
+                                </a>
                             </li>
                             <li>
                                 <a
