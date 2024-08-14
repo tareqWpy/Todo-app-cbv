@@ -81,25 +81,28 @@ class TaskComplete(LoginRequiredMixin, View):
         return redirect(self.success_url)
 
 
-class DeleteView(LoginRequiredMixin, DeleteView):
+class TaskDelete(LoginRequiredMixin, DeleteView):
     """
     A class-based view for deleting tasks.
     This view is restricted to authenticated users and ensures users can only delete their own tasks.
     """
 
     model = Task
-    context_object_name = "task"
     success_url = reverse_lazy("task-list")
-
-    def get(self, request, *args, **kwargs):
-        """
-        Handles GET requests by forwarding them to the POST handler,
-        ensuring the deletion occurs.
-        """
-        return self.post(request, *args, **kwargs)
 
     def get_queryset(self):
         """
         Returns a queryset of tasks belonging to the logged-in user for deletion.
         """
         return self.model.objects.filter(user=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        """
+        Handles GET requests by deleting the task directly instead of showing a confirmation.
+        """
+        # Retrieve the task object
+        task = self.get_object()
+        # Delete the task
+        task.delete()
+        # Redirect after deletion
+        return redirect(self.success_url)
