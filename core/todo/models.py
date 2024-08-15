@@ -5,6 +5,10 @@ User = get_user_model()
 
 
 class Task(models.Model):
+    """
+    A simple model to represent tasks.
+    """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     complete = models.BooleanField(default=False)

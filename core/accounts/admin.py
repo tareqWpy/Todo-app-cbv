@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 class CustomUserCreationForm(UserCreationForm):
     """
-    Class for Custom Form.
+    A class for Custom Form.
     """
 
     class Meta:
@@ -16,7 +16,7 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserAdmin(UserAdmin):
     """
-    Class for presenting the Custom User models data in Admin panel.
+    A class for presenting the Custom User models data in Admin panel.
     """
 
     model = User
@@ -88,6 +88,6 @@ class CustomUserAdmin(UserAdmin):
 
 
 """
-Registeration for Admin panel to present data.
+Registeration for Admin panel to present data of Users.
 """
 admin.site.register(User, CustomUserAdmin)

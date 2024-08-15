@@ -3,6 +3,10 @@ from .models import Task
 
 
 class TaskUpdateForm(forms.ModelForm):
+    """
+    A Custom form to create Tasks.
+    """
+
     title = forms.CharField(
         widget=forms.TextInput(
             attrs={

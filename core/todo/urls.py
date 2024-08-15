@@ -7,7 +7,9 @@ from .views import (
     TaskDelete,
 )
 
-
+"""
+Important urls related to the todo app.
+"""
 urlpatterns = [
     path("", TaskList.as_view(), name="task-list"),
     path("create/", TaskCreate.as_view(), name="create-task"),

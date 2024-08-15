@@ -6,8 +6,6 @@ from django.contrib.auth import login
 from django.shortcuts import redirect
 from accounts.forms import CustomUserCreationForm
 
-# Create your views here.
-
 
 class CustomLoginView(LoginView):
     """

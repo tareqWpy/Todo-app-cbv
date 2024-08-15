@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 class UserManager(BaseUserManager):
     """
-    Custom user model manager where email is the uinque idnetifires for authentication instead of username.
+    A custom user model manager where email is the uinque idnetifires for authentication instead of username.
     """
 
     def create_user(self, email, password, **extra_fields):
