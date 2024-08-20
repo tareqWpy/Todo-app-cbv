@@ -37,7 +37,7 @@ class TaskCreate(LoginRequiredMixin, CreateView):
 
     model = Task
     fields = ["title"]
-    success_url = reverse_lazy("task-list")
+    success_url = reverse_lazy("todo:task-list")
 
     def form_valid(self, form):
         """
@@ -55,7 +55,7 @@ class TaskUpdate(LoginRequiredMixin, UpdateView):
     """
 
     model = Task
-    success_url = reverse_lazy("task-list")
+    success_url = reverse_lazy("todo:task-list")
     form_class = TaskUpdateForm
     template_name = "todo/update_task.html"
 
@@ -67,7 +67,7 @@ class TaskComplete(LoginRequiredMixin, View):
     """
 
     model = Task
-    success_url = reverse_lazy("task-list")
+    success_url = reverse_lazy("todo:task-list")
 
     def get(self, request, *args, **kwargs):
         """
@@ -88,7 +88,7 @@ class TaskDelete(LoginRequiredMixin, DeleteView):
     """
 
     model = Task
-    success_url = reverse_lazy("task-list")
+    success_url = reverse_lazy("todo:task-list")
 
     def get_queryset(self):
         """

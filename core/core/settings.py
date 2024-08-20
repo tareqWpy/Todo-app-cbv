@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     # ? via manage.py
     "accounts",
     "todo",
+    "rest_framework",
+    "django_filters",
 ]
 
 MIDDLEWARE = [

@@ -42,7 +42,7 @@
                 <form
                     class="pt-3"
                     method="POST"
-                    action="{% url 'create-task' %}"
+                    action="{% url 'todo:create-task' %}"
                 >
                     {% csrf_token %}
                     <div class="input-group mb-3">
@@ -74,12 +74,12 @@
                             class="form-control"
                             aria-label="Text input with segmented dropdown button"
                         >
-                        <span>{{task.title}}</span>
+                            <span>{{task.title}}</span>
                         </span>
                         <a
                             type="button"
                             class="btn btn-outline-danger"
-                            href="{% url 'delete-task' task.id %}"
+                            href="{% url 'todo:delete-task' task.id %}"
                             ><i class="bi bi-trash"></i
                         ></a>
                         <button
@@ -94,7 +94,7 @@
                             <li>
                                 <a
                                     class="dropdown-item"
-                                    href="{% url 'compelete-task' task.id %}"
+                                    href="{% url 'todo:compelete-task' task.id %}"
                                 >
                                     <!--prettier-ignore-->
                                     {% if task.complete %} 
@@ -107,7 +107,7 @@
                             <li>
                                 <a
                                     class="dropdown-item"
-                                    href="{% url 'update-task' task.id %}"
+                                    href="{% url 'todo:update-task' task.id %}"
                                     >Edit</a
                                 >
                             </li>
