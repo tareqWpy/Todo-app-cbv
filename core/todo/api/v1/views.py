@@ -4,36 +4,39 @@ from .serializers import TaskSerializers
 from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
 from ...models import Task
+from rest_framework.filters import SearchFilter, OrderingFilter
+from .paginations import DefaultPagination
 
 
 class TaskModelViewSet(viewsets.ModelViewSet):
     """
     A ModelViewSet for managing tasks. It filters tasks based on the authenticated user and provides
     options to filter by 'user' and 'complete' fields.
+
+    Attributes:
+    permission_classes: List of permissions classes that the viewset requires. In this case, only authenticated users are allowed to access the endpoints.
+
+    serializer_class: The serializer class used for serializing and deserializing task data.
+
+    filter_backends: List of filter backends that the viewset uses. In this case, DjangoFilterBackend is used to filter tasks based on 'user' and 'complete' fields.
+
+    filterset_fields: List of fields that can be used for filtering tasks. In this case, tasks can be filtered by 'user' and 'complete' fields.
+
+    search_fields: List of fields that can be used for searching tasks. In this case, tasks can be searched by 'title' and 'user__email' fields.
+
+    ordering_fields: List of fields that can be used for ordering tasks. In this case, tasks can be ordered by 'published_date' field.
+
+    pagination_class: The pagination class used for paginating the task list.
+
     """
 
     permission_classes = [IsAuthenticated]
-    """
-    List of permissions classes that the viewset requires. In this case, only authenticated users
-    are allowed to access the endpoints.
-    """
-
     serializer_class = TaskSerializers
-    """
-    The serializer class used for serializing and deserializing task data.
-    """
-
-    filter_backends = [DjangoFilterBackend]
-    """
-    List of filter backends that the viewset uses. In this case, DjangoFilterBackend is used to
-    filter tasks based on 'user' and 'complete' fields.
-    """
-
-    filterset_fields = ["user", "complete"]
-    """
-    List of fields that can be used for filtering tasks. In this case, tasks can be filtered by 'user'
-    and 'complete' fields.
-    """
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = {"complete": ["exact"], "created_date": ["gte", "lte"]}
+    search_fields = ["title", "user__email"]
+    ordering_fields = ["published_date"]
+    pagination_class = DefaultPagination
 
     def get_queryset(self):
         """
