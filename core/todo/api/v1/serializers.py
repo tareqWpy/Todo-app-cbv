@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from todo.models import Task
 from accounts.models import User
+from django.urls import reverse
 
 
 class TaskSerializers(serializers.ModelSerializer):
@@ -22,7 +23,7 @@ class TaskSerializers(serializers.ModelSerializer):
     """
 
     relative_url = serializers.URLField(source="get_absolute_api_url", read_only=True)
-    absolute_url = serializers.SerializerMethodField()
+    absolute_url = serializers.SerializerMethodField(method_name="get_abs_url")
 
     class Meta:
         model = Task
@@ -38,18 +39,24 @@ class TaskSerializers(serializers.ModelSerializer):
         ]
         read_only_fields = ["user"]
 
-    def get_absolute_url(self, obj):
+    def get_abs_url(self, obj):
         """
         Returns the absolute URL of the task.
 
+        This method generates the absolute URL of a task based on its primary key. It uses the
+        Django reverse function to construct the URL and the request object to build the absolute
+        URL from the relative URL.
+
         Args:
-        - obj: The Task model instance for which the absolute URL needs to be generated.
+        - obj (Task): The Task model instance for which the absolute URL needs to be generated.
 
         Returns:
-        - The absolute URL of the task.
+        - str: The absolute URL of the task.
         """
         request = self.context.get("request")
-        return request.build_absolute_uri(obj.pk)
+        return request.build_absolute_uri(
+            reverse("todo:api-v1:task-detail", args=[obj.pk])
+        )
 
     def to_representation(self, obj):
         """
