@@ -20,7 +20,7 @@
                 <a
                     type="button"
                     class="btn-close"
-                    href="{% url 'task-list' %}"
+                    href="{% url 'todo:task-list' %}"
                 ></a>
             </div>
 
@@ -43,10 +43,6 @@
     </div>
 </div>
 {% endblock %} {% block extra_js %}{% endblock %}
-
-<div class="header-bar">
-    <a href="{% url 'tasks' %}">&#8592; Back</a>
-</div>
 
 <div class="card-body">
     <form method="POST" action="">

@@ -20,7 +20,7 @@ class CustomLoginView(LoginView):
         """
         A function to redirect user after logging in to the task-list page.
         """
-        return reverse_lazy("task-list")
+        return reverse_lazy("todo:task-list")
 
 
 class RegisterPage(FormView):
@@ -32,7 +32,7 @@ class RegisterPage(FormView):
     template_name = "accounts/register.html"
     form_class = CustomUserCreationForm
     redirect_authenticated_user = True
-    success_url = reverse_lazy("task-list")
+    success_url = reverse_lazy("todo:task-list")
 
     def form_valid(self, form):
         """
@@ -50,5 +50,5 @@ class RegisterPage(FormView):
         Redirects authenticated users to the task list, preventing access to the registration page.
         """
         if self.request.user.is_authenticated:
-            return redirect("task-list")
+            return redirect("todo:task-list")
         return super(RegisterPage, self).get(*args, **kwargs)
