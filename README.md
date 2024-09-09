@@ -2,7 +2,7 @@
 <h1 align="center">Todo-App with Class-Bsed-View</h1>
 <h3 align="center">This is simple todo-app project with class based view</h3>
 
-<p align="center" style="display:flex; gap:12px; justify-content:center; align-items:center">
+<p align="center" style="display:flex; gap:16px; justify-content:center; align-items:center">
 <a href="https://www.python.org/" target="_blank"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" alt="python" width="80px" height="80px"/> </a>
 <a href="https://www.djangoproject.com/" target="_blank"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/django/django-plain-wordmark.svg" alt="django" width="80px" height="80px"/> </a>
 <a href="https://www.django-rest-framework.org/" target="_blank"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/djangorest/djangorest-original-wordmark.svg" alt="djangorest" width="100px" height="100px"/> </a>
