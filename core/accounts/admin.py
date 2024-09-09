@@ -21,7 +21,12 @@ class CustomUserAdmin(UserAdmin):
 
     model = User
     add_form = CustomUserCreationForm
-    list_display = ("email", "is_superuser", "is_active")
+    list_display = (
+        "email",
+        "is_superuser",
+        "is_active",
+        "is_verified",
+    )
     list_filter = ("email", "is_active")
     serching_fields = ("email",)
     ordering = ("email",)
@@ -46,6 +51,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
+                    "is_verified",
                 ),
             },
         ),
@@ -81,6 +87,7 @@ class CustomUserAdmin(UserAdmin):
                     "is_staff",
                     "is_active",
                     "is_superuser",
+                    "is_verified",
                 ),
             },
         ),

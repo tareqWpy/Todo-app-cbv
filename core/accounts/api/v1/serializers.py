@@ -11,6 +11,12 @@ from ...models import User
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
+
+    Attributes:
+    password1 (CharField): The password entered by the user.
+    """
 
     password1 = serializers.CharField(max_length=255, write_only=True)
 
@@ -19,6 +25,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ["email", "password", "password1"]
 
     def validate(self, attrs):
+        """
+        Validates the password and ensures it matches the confirmation password.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the passwords do not match or if the password does not meet the requirements.
+        """
         if attrs.get("password") != attrs.get("password1"):
             raise serializers.ValidationError({"details": "Passwords must match."})
         try:
@@ -28,11 +46,24 @@ class RegistrationSerializer(serializers.ModelSerializer):
         return super().validate(attrs)
 
     def create(self, validated_data):
+        """
+        Creates a new user with the validated data.
+
+        Args:
+        validated_data (dict): The validated attributes.
+
+        Returns:
+        User: The newly created user.
+        """
         validated_data.pop("password1", None)
         return User.objects.create_user(**validated_data)
 
 
 class CustomAuthTokenSerializer(serializers.Serializer):
+    """
+    Serializer for custom authentication token generation.
+    """
+
     email = serializers.CharField(label=_("Email"), write_only=True)
     password = serializers.CharField(
         label=_("Password"),
@@ -43,6 +74,18 @@ class CustomAuthTokenSerializer(serializers.Serializer):
     token = serializers.CharField(label=_("Token"), read_only=True)
 
     def validate(self, attrs):
+        """
+        Validates the email and password, and checks if the user is verified.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the email and password do not match, or if the user is not verified.
+        """
         username = attrs.get("email")
         password = attrs.get("password")
 
@@ -70,7 +113,23 @@ class CustomAuthTokenSerializer(serializers.Serializer):
 
 
 class CustomeTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Serializer for custom token pair generation.
+    """
+
     def validate(self, attrs):
+        """
+        Validates the token pair and checks if the user is verified.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the user is not verified.
+        """
         validated_data = super().validate(attrs)
         if not self.user.is_verified:
             raise serializers.ValidationError({"details": "user is not verified"})
@@ -80,11 +139,27 @@ class CustomeTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for changing the user's password.
+    """
+
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
     new_password1 = serializers.CharField(required=True)
 
     def validate(self, attrs):
+        """
+        Validates the new password and ensures it matches the confirmation password.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the passwords do not match or if the password does not meet the requirements.
+        """
         if attrs.get("new_password") != attrs.get("new_password1"):
             raise serializers.ValidationError({"details": "Passwords must match."})
         try:
@@ -95,9 +170,25 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class ActivationResendSerializer(serializers.Serializer):
+    """
+    Serializer for resending the activation email.
+    """
+
     email = serializers.EmailField(required=True)
 
     def validate(self, attrs):
+        """
+        Validates the email and checks if the user is already verified.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the user does not exist or if the user is already verified.
+        """
         email = attrs.get("email")
         try:
             user_obj = User.objects.get(email=email)
@@ -113,9 +204,25 @@ class ActivationResendSerializer(serializers.Serializer):
 
 
 class ResetPasswordRequestSerializer(serializers.Serializer):
+    """
+    Serializer for requesting a password reset email.
+    """
+
     email = serializers.EmailField(required=True)
 
     def validate(self, attrs):
+        """
+        Validates the email and checks if the user exists.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the user does not exist.
+        """
         email = attrs.get("email")
         try:
             user_obj = User.objects.get(email=email)
@@ -127,12 +234,29 @@ class ResetPasswordRequestSerializer(serializers.Serializer):
 
 
 class ResetPasswordConfirmSerializer(serializers.Serializer):
+    """
+    Serializer for confirming a password reset.
+    """
+
     new_password = serializers.CharField(max_length=255, write_only=True, required=True)
     confirm_password = serializers.CharField(
         max_length=255, write_only=True, required=True
     )
 
     def validate(self, attrs):
+        """
+        Validates the new password, ensures it matches the confirmation password,
+        and checks if the reset token is valid.
+
+        Args:
+        attrs (dict): The attributes to be validated.
+
+        Returns:
+        dict: The validated attributes.
+
+        Raises:
+        ValidationError: If the passwords do not match, if the reset token is invalid or has expired, or if the required data is missing.
+        """
         token = self.context.get("kwargs").get("token")
         encoded_pk = self.context.get("kwargs").get("encoded_pk")
 

@@ -32,9 +32,25 @@ from .serializers import (
 
 
 class RegistrationApiView(generics.GenericAPIView):
+    """
+    This view is responsible for handling user registration.
+    It accepts POST requests with user data and creates a new user in the database.
+    It also sends an activation email to the user's email address.
+    """
+
     serializer_class = RegistrationSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for user registration.
+
+        Parameters:
+        - request: The incoming request object containing user data.
+
+        Returns:
+        - A response object with HTTP status code 201 (Created) if the registration is successful.
+        - A response object with HTTP status code 400 (Bad Request) if the registration data is invalid.
+        """
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -61,14 +77,37 @@ class RegistrationApiView(generics.GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get_tokens_for_user(self, user):
+        """
+        Generates refresh and access tokens for a given user.
+
+        Parameters:
+        - user: The user object for which tokens need to be generated.
+
+        Returns:
+        - A string representing the access token.
+        """
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
 
 class CustomObtainAuthToken(ObtainAuthToken):
+    """
+    This view is responsible for obtaining an authentication token for a user.
+    It accepts POST requests with user credentials and returns a token.
+    """
+
     serializer_class = CustomAuthTokenSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for obtaining an authentication token.
+
+        Parameters:
+        - request: The incoming request object containing user credentials.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) and the authentication token if the credentials are valid.
+        """
         serializer = self.serializer_class(
             data=request.data, context={"request": request}
         )
@@ -79,27 +118,67 @@ class CustomObtainAuthToken(ObtainAuthToken):
 
 
 class CustomDiscardAuthToken(APIView):
+    """
+    This view is responsible for discarding an authentication token for a user.
+    It accepts POST requests and deletes the token associated with the user.
+    """
+
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
+        """
+        Handles POST requests for discarding an authentication token.
+
+        Parameters:
+        - request: The incoming request object containing the user's authentication token.
+
+        Returns:
+        - A response object with HTTP status code 204 (No Content) if the token is successfully discarded.
+        """
         request.user.auth_token.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
+    """
+    This view is responsible for obtaining a refresh and access token pair for a user.
+    It accepts POST requests with user credentials and returns a pair of tokens.
+    """
+
     serializer_class = CustomeTokenObtainPairSerializer
 
 
 class ChangePasswordAPIView(generics.GenericAPIView):
+    """
+    This view is responsible for changing a user's password.
+    It accepts PUT requests with the old and new passwords and updates the user's password in the database.
+    """
+
     serializer_class = ChangePasswordSerializer
     model = User
     permission_classes = [IsAuthenticated]
 
     def get_object(self, queryset=None):
+        """
+        Retrieves the user object for the current request.
+
+        Returns:
+        - The user object associated with the current request.
+        """
         obj = self.request.user
         return obj
 
     def put(self, request, *args, **kwargs):
+        """
+        Handles PUT requests for changing a user's password.
+
+        Parameters:
+        - request: The incoming request object containing the old and new passwords.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) if the password is successfully changed.
+        - A response object with HTTP status code 400 (Bad Request) if the old password is incorrect.
+        """
         self.object = self.get_object()
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
@@ -117,7 +196,23 @@ class ChangePasswordAPIView(generics.GenericAPIView):
 
 
 class ActivationTokenView(APIView):
+    """
+    This view is responsible for verifying a user's account using an activation token.
+    It accepts GET requests with an activation token and updates the user's account status in the database.
+    """
+
     def get(self, request, token, *args, **kwargs):
+        """
+        Handles GET requests for verifying a user's account using an activation token.
+
+        Parameters:
+        - request: The incoming request object containing the activation token.
+        - token: The activation token provided in the request.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) if the account is successfully verified and activated.
+        - A response object with HTTP status code 400 (Bad Request) if the token is invalid or expired.
+        """
         try:
             token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
             user_id = token.get("user_id")
@@ -145,16 +240,36 @@ class ActivationTokenView(APIView):
 
 
 class ActivationResendTokenView(generics.GenericAPIView):
+    """
+    This view is responsible for resending an activation email to a user.
+    It accepts POST requests with the user's email address and sends a new activation email to the user.
+    """
+
     serializer_class = ActivationResendSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for resending an activation email.
+
+        Parameters:
+        - request: The incoming request object containing the user's email address.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) if the activation email is successfully resent.
+        """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_obj = serializer.validated_data["user"]
         token = self.get_tokens_for_user(user_obj)
+        activation_url = reverse(
+            "accounts:activation-confirm",
+            kwargs={"token": token},
+        )
+        activation_link = f"{request.scheme}://{request.get_host()}{activation_url}"
+
         email_obj = EmailMessage(
             "email/activation_email.tpl",
-            {"token": token},
+            {"activation_link": activation_link},
             "admin@amin.com",
             to=[user_obj.email],
         )
@@ -165,14 +280,37 @@ class ActivationResendTokenView(generics.GenericAPIView):
         )
 
     def get_tokens_for_user(self, user):
+        """
+        Generates refresh and access tokens for a given user.
+
+        Parameters:
+        - user: The user object for which tokens need to be generated.
+
+        Returns:
+        - A string representing the access token.
+        """
         refresh = RefreshToken.for_user(user)
         return str(refresh.access_token)
 
 
 class PasswordResetRequestView(generics.GenericAPIView):
+    """
+    This view is responsible for initiating a password reset process for a user.
+    It accepts POST requests with the user's email address and sends a password reset email to the user.
+    """
+
     serializer_class = ResetPasswordRequestSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for initiating a password reset process.
+
+        Parameters:
+        - request: The incoming request object containing the user's email address.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) if the password reset email is successfully sent.
+        """
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user_obj = serializer.validated_data["user"]
@@ -202,9 +340,24 @@ class PasswordResetRequestView(generics.GenericAPIView):
 
 
 class PasswordResetConfirmView(generics.GenericAPIView):
+    """
+    This view is responsible for confirming a password reset request for a user.
+    It accepts POST requests with the new password and updates the user's password in the database.
+    """
+
     serializer_class = ResetPasswordConfirmSerializer
 
     def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests for confirming a password reset request.
+
+        Parameters:
+        - request: The incoming request object containing the new password.
+        - kwargs: Additional keyword arguments containing the encoded primary key and token.
+
+        Returns:
+        - A response object with HTTP status code 200 (OK) if the password reset is successfully completed.
+        """
         serializer = self.serializer_class(
             data=request.data, context={"kwargs": kwargs}
         )
