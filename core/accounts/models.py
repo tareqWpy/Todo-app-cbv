@@ -4,14 +4,12 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
     """
-    A custom user model manager where email is the uinque idnetifires for authentication instead of username.
+    Custom user model manager where email is the uinque idnetifires for authentication instead of username.
     """
 
     def create_user(self, email, password, **extra_fields):
@@ -33,6 +31,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_verified", True)
 
         if extra_fields.get("is_staff") is not True:
             raise ValueError(_("SuperUser must have is_staff=True"))
@@ -50,6 +49,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=255, unique=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

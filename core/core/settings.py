@@ -47,8 +47,14 @@ INSTALLED_APPS = [
     # ? via manage.py
     "accounts",
     "todo",
+    # ? via pip
     "rest_framework",
+    "rest_framework.authtoken",
     "django_filters",
+    "drf_yasg",
+    "rest_framework_simplejwt",
+    "mail_templated",
+    "djoser",
 ]
 
 MIDDLEWARE = [
@@ -148,6 +154,25 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.User"
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://8000-idx-my-todo-app-1723443171981.cluster-p6qcyjpiljdwusmrjxdspyb5m2.cloudworkstations.dev",
-]
+# configurations rest_famework
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ]
+}
+
+
+# EMAIL
+EMAIL_BACKEND = config("EMAIL_BACKEND")
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_POST = config("EMAIL_POST")
+# ? this line goes to comment because the server does not support the STARTTLS Extension
+# EMAIL_USE_TLS = config("EMAIL_USE_TLS")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+# with this environment variable we can configure the token lifetime
+PASSWORD_RESET_TIMEOUT = config("PASSWORD_RESET_TIMEOUT", cast=int)
