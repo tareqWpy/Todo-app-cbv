@@ -41,6 +41,44 @@ git clone https://github.com/tareqWpy/Todo-app-cbv.git
 
 ### Getting ready
 
+#### if you have docker installed, you can use the following commands before starting:
+
+Navigate to your project directory where the docker-compose.yml file exists:
+
+```bash
+docker-compose up --build
+```
+
+You need to access your backend container's bash:
+
+```bash
+docker-compose exec backend bash
+```
+
+Then create the database tables:
+
+```bash
+python manage.py makemigrations
+```
+
+This will create all the migrations file (database migrations) required to run this App.
+
+Now, to apply this migrations run the following command:
+
+```bash
+python manage.py migrate
+```
+
+For leaving the bash terminal of your backend container:
+
+```bash
+exit
+```
+
+Then you can read [options](#options) part.
+
+#### if you don't have docker installed, you can use the following commands before starting:
+
 Create an enviroment in order to keep the repo dependencies seperated from your local machine.
 
 ```bash
@@ -53,7 +91,7 @@ Make sure to install the dependencies of the project through the requirements.tx
 pip install -r requirements.txt
 ```
 
-Once you have installed django and other packages, go to the cloned repo directory and run the following command
+Once you have installed django and other packages, go to the cloned repo directory and run the following command:
 
 ```bash
 python manage.py makemigrations
@@ -61,7 +99,7 @@ python manage.py makemigrations
 
 This will create all the migrations file (database migrations) required to run this App.
 
-Now, to apply this migrations run the following command
+Now, to apply this migrations run the following command:
 
 ```bash
 python manage.py migrate
@@ -69,13 +107,13 @@ python manage.py migrate
 
 ### options
 
-Project it self has the user creation form but still in order to use the admin you need to create a super user.you can use the createsuperuser option to make a super user.
+Project it self has the user creation form but still in order to use the admin you need to create a super user.you can use the createsuperuser option to make a super user:
 
 ```bash
 python manage.py createsuperuser
 ```
 
-And lastly let's make the App run. We just need to start the server now and then we can start using our simple todo App. Start the server by following command
+And lastly let's make the App run. We just need to start the server now and then we can start using our simple todo App. Start the server by following command:
 
 ```bash
 python manage.py runserver
