@@ -24,9 +24,9 @@
 ### Features
 
 -   Bootstrap5
+-   Django LTS (4.2)
 -   Responsive Design
 -   Class Based Views
--   Django LTS (4.2.15)
 -   Template Based & API Based
 -   User authentication with JWT
 -   Email Verification and other features
