@@ -1,6 +1,17 @@
+# general modules
 django>=4.2,<4.3
 python-decouple
 pillow
 djangorestframework
+
+# third-party modules
 markdown     
 django-filter
+drf-yasg[validation]
+djangorestframework-simplejwt[crypto]
+djoser
+
+# deployment modules
+
+# Email third-party modules
+django-mail-templated
