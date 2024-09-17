@@ -13,5 +13,11 @@ djoser
 
 # deployment modules
 
-# Email third-party modules
+# email third-party modules
 django-mail-templated
+
+# refactoring and testing modules
+black
+flake8
+pytest
+pytest-django
