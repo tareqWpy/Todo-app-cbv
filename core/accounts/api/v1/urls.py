@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 # Import views from the local module
 from . import views
 
+app_name = "api-v1"
 # Define the URL patterns for the application
 urlpatterns = [
     # URL pattern for user registration

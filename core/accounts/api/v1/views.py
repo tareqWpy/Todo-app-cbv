@@ -61,7 +61,7 @@ class RegistrationApiView(generics.GenericAPIView):
             user_obj = get_object_or_404(User, email=email)
             token = self.get_tokens_for_user(user_obj)
             activation_url = reverse(
-                "accounts:activation-confirm",
+                "accounts:api-v1:activation-confirm",
                 kwargs={"token": token},
             )
             activation_link = f"{request.scheme}://{request.get_host()}{activation_url}"
@@ -262,7 +262,7 @@ class ActivationResendTokenView(generics.GenericAPIView):
         user_obj = serializer.validated_data["user"]
         token = self.get_tokens_for_user(user_obj)
         activation_url = reverse(
-            "accounts:activation-confirm",
+            "accounts:api-v1:activation-confirm",
             kwargs={"token": token},
         )
         activation_link = f"{request.scheme}://{request.get_host()}{activation_url}"
@@ -321,7 +321,7 @@ class PasswordResetRequestView(generics.GenericAPIView):
                 user=user_obj,
             )
             reset_url = reverse(
-                "accounts:password-reset-confirm",
+                "accounts:api-v1:password-reset-confirm",
                 kwargs={"encoded_pk": encoded_pk, "token": token},
             )
             reset_link = f"{request.scheme}://{request.get_host()}{reset_url}"
