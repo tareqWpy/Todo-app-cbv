@@ -1,6 +1,7 @@
 import pytest
 from accounts.models import User
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APIClient
 
 
@@ -38,7 +39,7 @@ class TestPostAPI:
         user = common_user
         api_client.force_authenticate(user=user)
         response = api_client.get(url)
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_200_OK
 
     def test_task_create_response_401_status(self, api_client):
         """
@@ -49,7 +50,7 @@ class TestPostAPI:
             "title": "Test Task",
         }
         response = api_client.post(url, data)
-        assert response.status_code == 401
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_task_create_response_201_status(self, api_client, common_user):
         """
@@ -62,9 +63,9 @@ class TestPostAPI:
         user = common_user
         api_client.force_authenticate(user=user)
         response = api_client.post(url, data)
-        assert response.status_code == 201
+        assert response.status_code == status.HTTP_201_CREATED
 
-    def test_task_create_response_400_status_missing_data(
+    def test_task_create_response_missing_data_400_status(
         self, api_client, common_user
     ):
         """
@@ -75,9 +76,9 @@ class TestPostAPI:
         user = common_user
         api_client.force_authenticate(user=user)
         response = api_client.post(url, data)
-        assert response.status_code == 400
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_task_create_response_400_status_invalid_data(
+    def test_task_create_response_invalid_data_400_status(
         self, api_client, common_user
     ):
         """
@@ -90,9 +91,9 @@ class TestPostAPI:
         user = common_user
         api_client.force_authenticate(user=user)
         response = api_client.post(url, data)
-        assert response.status_code == 400
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
 
-    def test_task_create_response_201_status_duplicate_title(
+    def test_task_create_response_duplicate_title_201_status(
         self, api_client, common_user
     ):
         """
@@ -106,4 +107,4 @@ class TestPostAPI:
         api_client.force_authenticate(user=user)
         api_client.post(url, data)
         response = api_client.post(url, data)
-        assert response.status_code == 201
+        assert response.status_code == status.HTTP_201_CREATED
