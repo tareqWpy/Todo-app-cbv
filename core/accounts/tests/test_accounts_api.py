@@ -18,6 +18,7 @@ def api_client():
     """
     Returns an instance of APIClient for testing API endpoints.
     """
+
     client = APIClient()
     return client
 
@@ -25,6 +26,7 @@ def api_client():
 @pytest.fixture
 def unverified_user():
     """Creates a unverified test user."""
+
     user = User.objects.create_user(
         email="testuser@example.com", password="TestPassword123!"
     )
@@ -43,6 +45,7 @@ def verified_user():
 @pytest.fixture
 def verified_user_with_auth_token(api_client, verified_user):
     """Creates a verified test user and assigns a token."""
+
     user = verified_user
     response = api_client.post(
         reverse("accounts:api-v1:token-login"),
@@ -55,6 +58,7 @@ def verified_user_with_auth_token(api_client, verified_user):
 @pytest.fixture
 def verified_user_with_token_for_password_reset(api_client, verified_user):
     """Creates a verified test user and assigns a token for password reset."""
+
     url = reverse("accounts:api-v1:password-reset")
     response = api_client.post(url, {"email": verified_user.email})
     assert response.status_code == status.HTTP_200_OK, "Password reset request failed"
@@ -94,6 +98,7 @@ def create_expired_token(unverified_user):
     """
     Creates an expired JWT token for the given user.
     """
+
     secret_key = settings.SECRET_KEY
     payload = {
         "user_id": unverified_user.id,
@@ -105,6 +110,7 @@ def create_expired_token(unverified_user):
 @pytest.fixture
 def create_invalid_token(unverified_user):
     """Creates an invalid JWT token for the given user."""
+
     secret_key = "not_secret_key"  # for creating invalid token
     payload = {
         "user_id": unverified_user.id,

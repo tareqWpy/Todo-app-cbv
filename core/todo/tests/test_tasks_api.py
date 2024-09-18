@@ -45,6 +45,7 @@ class TestPostAPI:
         """
         Test POST request to task list endpoint without authentication returns 401 status code.
         """
+
         url = reverse("todo:api-v1:task-list")
         data = {
             "title": "Test Task",
