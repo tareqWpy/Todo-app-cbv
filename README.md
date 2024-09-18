@@ -131,7 +131,6 @@ A simple view of the project model schema.
 
 ### Todo
 
--   [ ] add unit tests
 -   [ ] add heroku config files
 -   [ ] leave comments for codes
 -   [ ] create a video tutorial or demo
