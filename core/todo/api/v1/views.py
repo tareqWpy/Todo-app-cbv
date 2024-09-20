@@ -1,11 +1,11 @@
-from rest_framework.decorators import permission_classes
-from rest_framework.permissions import IsAuthenticated
-from .serializers import TaskSerializers
-from rest_framework import viewsets
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.permissions import IsAuthenticated
+
 from ...models import Task
-from rest_framework.filters import SearchFilter, OrderingFilter
 from .paginations import DefaultPagination
+from .serializers import TaskSerializers
 
 
 class TaskModelViewSet(viewsets.ModelViewSet):
