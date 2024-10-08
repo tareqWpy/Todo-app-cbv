@@ -10,11 +10,11 @@ Important urls for account management.
 
 urlpatterns = [
     # ? Commented out URL pattern for the login view (uncomment to use)
-    # path("login/", CustomLoginView.as_view(), name="login"),
+    path("login/", CustomLoginView.as_view(), name="login"),
     # ? Commented out URL pattern for the logout view with a redirect to the home page (uncomment to use)
-    # path("logout", LogoutView.as_view(next_page="/"), name="logout"),
+    path("logout/", LogoutView.as_view(next_page="/"), name="logout"),
     # ? Commented out URL pattern for the registration view (uncomment to use)
-    # path("register/", RegisterPage.as_view(), name="register"),
+    path("register/", RegisterPage.as_view(), name="register"),
     # ? Include Django's built-in authentication URLs
     path("", include("django.contrib.auth.urls")),
     # ? Include URL patterns for the API v1
