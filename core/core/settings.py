@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "mail_templated",
     "djoser",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -206,7 +207,7 @@ CELERY_BROKER_URL = "redis://redis:6379/1"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     "delete_completed_tasks": {
-        "task": "todo.tasks.delete_completed_tasks",
-        "schedule": 10,
+        "task": "todo.tasks.deleteCompletedTasks",
+        "schedule": crontab(minute=10),
     }
 }

@@ -4,7 +4,7 @@ from todo.models import Task
 
 
 @shared_task
-def delete_completed_tasks():
+def deleteCompletedTasks():
     try:
         completed_tasks = Task.objects.filter(complete=True)
 
