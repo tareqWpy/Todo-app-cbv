@@ -1,4 +1,11 @@
 services:
+    redis:
+        container_name: redis
+        image: redis:7.4
+        ports:
+            - "127.0.0.1:6379:6379"
+        command: redis-server --save 60 1 --loglevel warning
+
     backend:
         build: .
         container_name: backend
@@ -17,6 +24,20 @@ services:
             - EMAIL_HOST_USER=
             - EMAIL_HOST_PASSWORD=
             - PASSWORD_RESET_TIMEOUT=120
+            - DJANGO_SETTINGS_MODULE=core.settings
+        depends_on:
+            - redis
+        restart: always
+
+    worker:
+        build: .
+        volumes:
+            - ./core:/app
+        command: celery -A core worker --loglevel=info
+        depends_on:
+            - backend
+            - redis
+
     smtp4dev:
         image: rnwood/smtp4dev:v3
         restart: always
