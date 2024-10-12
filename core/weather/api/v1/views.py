@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
-@method_decorator(cache_page(20 * 60), name="dispatch")
+@method_decorator(cache_page(60 * 20), name="dispatch")
 class WeatherApiView(APIView):
     permission_classes = [AllowAny]
     BASE_URL = "https://dragon.best/api/glax_weather.json"
