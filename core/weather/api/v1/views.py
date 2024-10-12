@@ -1,10 +1,13 @@
 import requests
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
+@method_decorator(cache_page(20 * 60), name="dispatch")
 class WeatherApiView(APIView):
     permission_classes = [AllowAny]
     BASE_URL = "https://dragon.best/api/glax_weather.json"
@@ -26,6 +29,5 @@ class WeatherApiView(APIView):
         """Handle API errors and return a standardized response."""
         error_message = {
             "details": response.json().get("message", "An error occurred"),
-            "status_code": response.status_code,
         }
         return Response(error_message, status=response.status_code)
