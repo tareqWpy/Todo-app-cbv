@@ -126,7 +126,7 @@ Once the server is up and running, head over to http://127.0.0.1:8000 for the Ap
 A simple view of the project model schema.
 
 <p align="center">
-<img src="./preview/models-schema.png" alt="database schema" width="300"/>
+<img src="./previews/models-schema.png" alt="database schema" width="300"/>
 </p>
 
 ### Todo
