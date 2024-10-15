@@ -28,4 +28,5 @@ Faker
 # background processing and caching modules
 Redis
 celery
+django-redis
 django-celery-beat
