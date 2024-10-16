@@ -14,6 +14,8 @@ django-cors-headers
 locust
 
 # deployment modules
+gunicorn
+psycopg[binary]
 
 # email third-party modules
 django-mail-templated
