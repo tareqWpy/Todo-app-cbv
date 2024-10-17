@@ -3,7 +3,7 @@ services:
         container_name: redis
         image: redis:7.4
         ports:
-            - "127.0.0.1:6379:6379"
+            - "6379:6379"
         command: redis-server --save 60 1 --loglevel warning
 
     backend:
@@ -15,28 +15,44 @@ services:
         ports:
             - "8000:8000"
         environment:
+            # basic settings
             - SECRET_KEY=test
             - DEBUG=True
+            - DJANGO_SETTINGS_MODULE=core.settings
+            # password reset timeout for api v1
+            - PASSWORD_RESET_TIMEOUT=120
+            # email confirguration
             - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
             - EMAIL_HOST=smtp4dev
-            - EMAIL_POST=25
+            - EMAIL_PORT=25
             - EMAIL_USE_TLS=True
             - EMAIL_HOST_USER=
             - EMAIL_HOST_PASSWORD=
-            - PASSWORD_RESET_TIMEOUT=120
-            - DJANGO_SETTINGS_MODULE=core.settings
+            #  database configuration
+            - DB_ENGINE=django.db.backends.sqlite3
+            - DB_NAME=/app/db.sqlite3
         depends_on:
             - redis
         restart: always
 
-    worker:
+    celery-worker:
         build: .
+        command: celery -A core worker -E --loglevel=info
         volumes:
             - ./core:/app
-        command: celery -A core worker --loglevel=info
         depends_on:
-            - backend
             - redis
+            - backend
+        restart: always
+
+    celery-beat:
+        build: .
+        command: celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+        volumes:
+            - ./core:/app
+        depends_on:
+            - redis
+            - backend
 
     smtp4dev:
         image: rnwood/smtp4dev:v3
