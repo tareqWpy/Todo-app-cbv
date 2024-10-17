@@ -1,23 +1,24 @@
+import logging
+
 from celery import shared_task
 from django.db import transaction
 from todo.models import Task
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
 def deleteCompletedTasks():
     try:
         completed_tasks = Task.objects.filter(complete=True)
-
+        logger.info(f"Found {completed_tasks.count()} completed tasks.")
         task_ids = list(completed_tasks.values_list("id", flat=True))
-        print("Deleting tasks with IDs:", task_ids)
-
+        logger.info("Deleting tasks with IDs: %s", task_ids)
         if task_ids:
             with transaction.atomic():
-                tasks = Task.objects.filter(id__in=task_ids)
-                count, _ = tasks.delete()
-                print(f"{count} tasks deleted.")
+                count, _ = Task.objects.filter(id__in=task_ids).delete()
+                logger.info("%d tasks deleted.", count)
         else:
-            print("No task IDs provided for deletion.")
-
+            logger.warning("No task IDs provided for deletion.")
     except Exception as e:
-        print(f"An error occurred while deleting tasks: {e}")
+        logger.error("Error deleting tasks: %s", str(e))

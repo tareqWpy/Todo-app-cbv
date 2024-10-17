@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "mail_templated",
     "djoser",
     "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -207,11 +208,15 @@ DJOSER = {
 
 # celery configuration
 CELERY_BROKER_URL = "redis://redis:6379/1"
+CELERY_RESULT_BACKEND = (
+    "db+postgresql://root:vMi8KYTHs09IBM97WYlfrFnO@postgres:5432/db_postgres"
+)
+CELERY_RESULT_EXTENDED = True
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     "delete_completed_tasks": {
         "task": "todo.tasks.deleteCompletedTasks",
-        "schedule": 10,
+        "schedule": 20,
     }
 }
 

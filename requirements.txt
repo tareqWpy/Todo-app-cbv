@@ -15,7 +15,7 @@ locust
 
 # deployment modules
 gunicorn
-psycopg[binary]
+psycopg2-binary
 
 # email third-party modules
 django-mail-templated
@@ -32,3 +32,6 @@ Redis
 celery
 django-redis
 django-celery-beat
+django-celery-results
+flower
+sqlalchemy

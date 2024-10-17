@@ -1,5 +1,14 @@
 services:
-    db:
+    redis:
+        container_name: redis
+        image: redis:7.4.1
+        volumes:
+            - redis_data:/data
+        ports:
+            - "6379:6379"
+        command: redis-server --save 60 1 --loglevel warning
+
+    postgres:
         image: postgres:15
         container_name: postgres
         volumes:
@@ -11,21 +20,13 @@ services:
         ports:
             - "5432:5432"
 
-    redis:
-        container_name: redis
-        image: redis:7.4
-        ports:
-            - "6379:6379"
-        command: redis-server --save 60 1 --loglevel warning
-
     backend:
         build: .
         container_name: backend
         command: sh -c "python manage.py makemigrations &&
             python manage.py migrate &&
             python manage.py collectstatic --noinput &&
-            gunicorn core.wsgi --bind 0.0.0.0:8000 &&
-            celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler"
+            gunicorn core.wsgi --bind 0.0.0.0:8000"
         volumes:
             - ./core:/app
             - static_volume:/app/static
@@ -36,6 +37,7 @@ services:
             # basic settings
             - SECRET_KEY=django-insecure-02*y+-u17cm&v(y+2@2jg%)(xld0p#szq#wnc2mnph(m#xoj&7
             - DEBUG=False
+            - DJANGO_SETTINGS_MODULE=core.settings
             # password reset timeout for api v1
             - PASSWORD_RESET_TIMEOUT=3600
             # email confirguration
@@ -50,21 +52,42 @@ services:
             - DB_NAME=db_postgres
             - DB_USER=root
             - DB_PASSWORD=vMi8KYTHs09IBM97WYlfrFnO
-            - DB_HOST=db
+            - DB_HOST=postgres
             - DB_PORT=5432
         depends_on:
             - redis
-            - db
+            - postgres
         restart: always
 
-    worker:
+    celery-worker:
         build: .
+        container_name: celery-worker
         command: celery -A core worker --loglevel=info
+        volumes:
+            - ./core:/app
+        environment:
+            - DB_ENGINE=django.db.backends.postgresql
+            - DB_NAME=db_postgres
+            - DB_USER=root
+            - DB_PASSWORD=vMi8KYTHs09IBM97WYlfrFnO
+            - DB_HOST=postgres
+            - DB_PORT=5432
         depends_on:
-            - backend
             - redis
-            - db
+            - backend
+            - postgres
         restart: always
+
+    celery-beat:
+        build: .
+        container_name: celery-beat
+        command: celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+        volumes:
+            - ./core:/app
+        depends_on:
+            - redis
+            - backend
+            - postgres
 
     nginx:
         image: nginx:mainline
@@ -84,3 +107,4 @@ volumes:
     static_volume:
     media_volume:
     postgres_data:
+    redis_data:
