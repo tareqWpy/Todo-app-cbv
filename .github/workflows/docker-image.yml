@@ -23,7 +23,7 @@ jobs:
               run: docker-compose up -d
 
             - name: Run Tests
-              run: docker-compose exec backend sh -c "flake8 && pytest ."
+              run: docker compose exec backend sh -c "flake8 && pytest ."
 
     Deploy:
         if: ${{ always() && contains(join(needs.Test.result, ','), 'success') }}
@@ -45,4 +45,4 @@ jobs:
                       cd ${{ secrets.PROJECT_PATH }}
                       docker compose -f docker-compose-stage.yml stop
                       git pull
-                      docker-compose -f docker-compose-stage.yml restart
+                      docker compose -f docker-compose-stage.yml restart
