@@ -216,7 +216,7 @@ CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BEAT_SCHEDULE = {
     "delete_completed_tasks": {
         "task": "todo.tasks.deleteCompletedTasks",
-        "schedule": 20,
+        "schedule": crontab(minute=20),
     }
 }
 
