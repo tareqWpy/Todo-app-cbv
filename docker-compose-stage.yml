@@ -14,9 +14,9 @@ services:
         volumes:
             - postgres_data:/var/lib/postgresql/data/
         environment:
-            - POSTGRES_USER=root
-            - POSTGRES_PASSWORD=vMi8KYTHs09IBM97WYlfrFnO
-            - POSTGRES_DB=db_postgres
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DB=${POSTGRES_DB}
         ports:
             - "5432:5432"
 
@@ -35,25 +35,25 @@ services:
             - "8000"
         environment:
             # basic settings
-            - SECRET_KEY=django-insecure-02*y+-u17cm&v(y+2@2jg%)(xld0p#szq#wnc2mnph(m#xoj&7
-            - DEBUG=False
-            - DJANGO_SETTINGS_MODULE=core.settings
+            - SECRET_KEY=${SECRET_KEY}
+            - DEBUG=${DEBUG}
+            - DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
             # password reset timeout for api v1
-            - PASSWORD_RESET_TIMEOUT=3600
+            - PASSWORD_RESET_TIMEOUT=${PASSWORD_RESET_TIMEOUT}
             # email confirguration
-            - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
-            - EMAIL_HOST=smtp.gmail.com
-            - EMAIL_PORT=587
-            - EMAIL_USE_TLS=True
-            - EMAIL_HOST_USER=animeartificialintelligence03@gmail.com
-            - EMAIL_HOST_PASSWORD=xywuynudbaxvqelh
+            - EMAIL_BACKEND=${EMAIL_BACKEND}
+            - EMAIL_HOST=${EMAIL_HOST}
+            - EMAIL_PORT=${EMAIL_PORT}
+            - EMAIL_USE_TLS=${EMAIL_USE_TLS}
+            - EMAIL_HOST_USER=${EMAIL_HOST_USER}
+            - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
             #  database configuration
-            - DB_ENGINE=django.db.backends.postgresql
-            - DB_NAME=db_postgres
-            - DB_USER=root
-            - DB_PASSWORD=vMi8KYTHs09IBM97WYlfrFnO
-            - DB_HOST=postgres
-            - DB_PORT=5432
+            - DB_ENGINE=${DB_ENGINE}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
         depends_on:
             - redis
             - postgres
@@ -66,12 +66,12 @@ services:
         volumes:
             - ./core:/app
         environment:
-            - DB_ENGINE=django.db.backends.postgresql
-            - DB_NAME=db_postgres
-            - DB_USER=root
-            - DB_PASSWORD=vMi8KYTHs09IBM97WYlfrFnO
-            - DB_HOST=postgres
-            - DB_PORT=5432
+            - DB_ENGINE=${DB_ENGINE}
+            - DB_NAME=${DB_NAME}
+            - DB_USER=${DB_USER}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - DB_HOST=${DB_HOST}
+            - DB_PORT=${DB_PORT}
         depends_on:
             - redis
             - backend
