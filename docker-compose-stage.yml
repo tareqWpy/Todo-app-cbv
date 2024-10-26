@@ -54,9 +54,8 @@ services:
             - DB_PASSWORD=${DB_PASSWORD}
             - DB_HOST=${DB_HOST}
             - DB_PORT=${DB_PORT}
-            # csrf and site configuration
+            # csrf configuration
             - VPS_ORIGIN=${VPS_ORIGIN}
-            - SITE_ID=${SITE_ID}
             # security configuration
             - USE_SSL_SETTING=${USE_SSL_SETTING}
             - ALLOWED_HOSTS=${ALLOWED_HOSTS}
