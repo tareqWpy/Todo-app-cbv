@@ -46,6 +46,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # ? via django
+    "django.contrib.sites",
+    "django.contrib.sitemaps",
     # ? via manage.py
     "accounts",
     "todo",
@@ -235,6 +238,10 @@ CACHES = {
 CSRF_TRUSTED_ORIGINS = [
     config("VPS_ORIGIN", default="https://localhost"),
 ]
+
+# site framework
+SITE_ID = config("SITE_ID", cast=int)
+
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
