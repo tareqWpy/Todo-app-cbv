@@ -47,13 +47,19 @@ services:
             - EMAIL_USE_TLS=${EMAIL_USE_TLS}
             - EMAIL_HOST_USER=${EMAIL_HOST_USER}
             - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD}
-            #  database configuration
+            # database configuration
             - DB_ENGINE=${DB_ENGINE}
             - DB_NAME=${DB_NAME}
             - DB_USER=${DB_USER}
             - DB_PASSWORD=${DB_PASSWORD}
             - DB_HOST=${DB_HOST}
             - DB_PORT=${DB_PORT}
+            # csrf and site configuration
+            - VPS_ORIGIN=${VPS_ORIGIN}
+            - SITE_ID=${SITE_ID}
+            # security configuration
+            - USE_SSL_SETTING=${USE_SSL_SETTING}
+            - ALLOWED_HOSTS=${ALLOWED_HOSTS}
         depends_on:
             - redis
             - postgres
@@ -102,9 +108,9 @@ services:
         ports:
             - "443:443"
         volumes:
-            - /etc/letsencrypt/live/djangotech.online/fullchain.pem:/etc/nginx/ssl/fullchain.pem
-            - /etc/letsencrypt/live/djangotech.online/privkey.pem:/etc/nginx/ssl/privkey.pem
-            - ./default.conf:/etc/nginx/conf.d/default.conf
+            - /etc/letsencrypt/live/djangotech.online/fullchain.pem:/etc/nginx/ssl/fullchain.pem:z
+            - /etc/letsencrypt/live/djangotech.online/privkey.pem:/etc/nginx/ssl/privkey.pem:z
+            - ./default.conf:/etc/nginx/conf.d/default.conf:z
             - static_volume:/home/app/static
             - media_volume:/home/app/media
         depends_on:
